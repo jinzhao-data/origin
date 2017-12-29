@@ -1,0 +1,15 @@
+select t1.tagname as tag,
+  t1.vid as video,
+  sum(case when t2.udid is not null then 1 else 0 end) as up, #视频新客留存加分
+  sum(case when t2.udid is null then 1 else 0 end) as down, #视频新客留存减分
+  (sum(case when t2.udid is not null then 1 else 0 end) - sum(case when t2.udid is null then 1 else 0 end)) as source #视频新客留存总得分
+from
+(select udid,parameters['vid'] as vid,parameters['tag_name'] as tagname
+  from dws_bobo_logs.dws_bobo_sdk_all
+  where dt = '20171226'
+  and eventid ='play' and parameters['new_device_tag'] = 'Y') t1 #26日新客观看视频
+  left JOIN
+(select  DISTINCT udid from dws_bobo_logs.dws_bobo_sdk_all where dt = '20171227')  t2 #27日用户
+on t1.udid = t2.udid
+group by t1.tagname,t1.vid
+order by source desc
