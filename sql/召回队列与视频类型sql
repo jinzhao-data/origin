@@ -1,4 +1,4 @@
-select t1.dt,
+select t3.dt,
       t3.queue_name as "队列",
        t3.tagname as "视频类型",
        t3.showtimes as "曝光量",
