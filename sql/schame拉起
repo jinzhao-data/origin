@@ -1,13 +1,24 @@
-select t1.dt,count(t1.udid) as dau,sum(t2.showtimes) as shows,sum(t2.click) as clicks,sum(t2.vvtimes) as vvtime, sum(alltimes) as videotime
+select t1.dt,
+    count(t1.udid) as dau,
+    sum(t2.showtimes) as shows,
+    sum(t2.click) as clicks,
+    sum(t2.vvtimes) as vvtime,
+    sum(alltimes) as videotime
 from
-(select distinct dt,udid from dwd_logs.dwd_bobo_fast
-where dt>='20171219' and dt<= '20171228' and eventid='event_deep_link' and parameters['deeplink'] like '%pg=gt%') t1
-join
-(select dt,udid, sum(case when parameters['is_rec_show']='Y' then 1 else 0 end) as showtimes,
-sum(case when parameters['is_rec_play']='Y' then 1 else 0 end ) as click,
-sum(case when eventid='play' then cast(coalesce(parameters['playduration'],'0')as bigint) else 0 end) as vvtimes,
-sum(case when eventid='play' then cast(coalesce(parameters['duration'],'0')as bigint) else 0 end) as alltimes
-         from dws_bobo_logs.dws_bobo_sdk_all
-         where dt>='20171219' and dt<= '20171228' group by dt,udid) t2
+    (select distinct dt,
+        udid
+     from dwd_logs.dwd_bobo_fast
+     where dt>='20171219' and dt<= '20171228'
+        and eventid='event_deep_link'
+        and parameters['deeplink'] like '%pg=gt%') t1
+    join
+    (select dt,
+        udid,
+        sum(case when parameters['is_rec_show']='Y' then 1 else 0 end) as showtimes,
+        sum(case when parameters['is_rec_play']='Y' then 1 else 0 end ) as click,
+        sum(case when eventid='play' then cast(coalesce(parameters['playduration'],'0')as bigint) else 0 end) as vvtimes,
+        sum(case when eventid='play' then cast(coalesce(parameters['duration'],'0')as bigint) else 0 end) as alltimes
+     from dws_bobo_logs.dws_bobo_sdk_all
+     where dt>='20171219' and dt<= '20171228' group by dt,udid) t2
 on  t1.dt= t2.dt and t1.udid=t2.udid
 group by t1.dt

@@ -1,0 +1,37 @@
+select t3.queue_name as "队列",
+       t3.page_type as "页面类型",
+       t3.channelid as "频道",
+       t3.videoid as "视频ID",
+       coalesce(t4.title,'') as "视频标题",
+       t3.rec_show_num as "曝光量",
+       t3.rec_play_num as "点击量",
+       t3.rec_playduration as "播放时长",
+       t3.rec_duration as "视频时长",
+       round((case when cast(t3.rec_show_num as double)>0 then cast(t3.rec_play_num as double)/cast(t3.rec_show_num as double) else 0 end),4) as "点展比",
+       round((case when cast(t3.rec_duration as double)>0 then cast(t3.rec_playduration as double)/cast(t3.rec_duration as double) else 0 end),4) as "播放完成度"
+from
+    (select t1.queue_name,(case when t2.source='1' then 'homepage' else 'relpage' end) as page_type,t2.channelid,t2.videoid,
+            sum(case when t2.eventid='event_clientshow' then 1 else 0 end) as rec_show_num,
+            sum(case when t2.eventid='play' then 1 else 0 end) as rec_play_num,
+            sum(case when t2.eventid='play' and cast(coalesce(t2.playduration,'0') as bigint)>0 and cast(coalesce(t2.duration,'0') as bigint)>0 and cast(coalesce(t2.playduration,'0') as bigint)>cast(coalesce(t2.duration,'0') as bigint)*10 then cast(coalesce(t2.duration,'0') as bigint)*10
+                     when t2.eventid='play' and cast(coalesce(t2.playduration,'0') as bigint)>0 and cast(coalesce(t2.duration,'0') as bigint)>0 and cast(coalesce(t2.playduration,'0') as bigint)<=cast(coalesce(t2.duration,'0') as bigint)*10
+                     then cast(coalesce(t2.playduration,'0') as bigint) else 0 end) as rec_playduration,
+            sum(case when t2.eventid='play' and cast(coalesce(t2.playduration,'0') as bigint)>0 and cast(coalesce(t2.duration,'0') as bigint)>0 and cast(coalesce(t2.duration,'0') as bigint)<7200
+                     then cast(coalesce(t2.duration,'0') as bigint) else 0 end) as rec_duration
+    from
+        (select impressionid,videoid,queue_name,count(*)
+         from dwd_logs.dwd_mpjs_log_recommend_user_video
+         CROSS JOIN UNNEST(split(queue,' ')) AS t (queue_name)
+         where dt='20171126' and length(impressionid)>0 and length(videoid)>0 and trim(queue_name)='fresh'
+         group by impressionid,videoid,queue_name) t1
+        join
+        (select parameters['impressionid'] as impressionid,parameters['videoid'] as videoid,parameters['source'] as source,parameters['channelid'] as channelid,
+                eventid,parameters['playduration'] as playduration,parameters['duration'] as duration
+         from dwd_logs.dwd_bobo_fast
+         where dt='20171126' and length(parameters['impressionid'])>0 and length(parameters['videoid'])>0 and (eventid ='play' or eventid='event_clientshow') and (parameters['source']='1' or parameters['source']='4' or parameters['source']='21' or parameters['source']='22')) t2
+         on (t1.impressionid=t2.impressionid and t1.videoid=t2.videoid)
+    group by 1,2,3,4) t3
+left join
+    dim_mp.dim_mp_rec_video t4
+on (cast(t3.videoid as bigint)=t4.video_id)
+order by 1,2,3,4,5;

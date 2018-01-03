@@ -1,9 +1,6 @@
 SELECT PARAMETERS['channelid'] AS chanid,
       count( distinct (case when eventid = 'event_clientshow' then udid else null end)) as uv
-                    count(CASE
-                              WHEN eventid='play' THEN 1
-                              ELSE NULL
-                          END) AS vv
+      count(CASE WHEN eventid='play' THEN 1 ELSE NULL END) AS vv
    FROM dws_bobo_logs.dws_bobo_sdk_all
    WHERE dt = '20171228'
      AND eventid = 'play'
