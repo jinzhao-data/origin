@@ -1,24 +1,42 @@
-select *
-from dws_bobo_logs.dws_bobo_sdk_all
-where dt >= '20180107' and dt  <= '20180107'
-    and eventid = 'exit' limit 10
-####
-select dt,parameters['exittype'] as exittype,count(1),count(distinct udid) as countudids
-from dws_bobo_logs.dws_bobo_sdk_all
-where dt >= '20180107' and dt  <= '20180120'
-and eventid = 'exit'
-group by dt,parameters['exittype']
-
-####
-select dt,udid,parameters['new_device_tag'] as usertype,
-sum(cast(coalesce(parameters['exittime'],'0')as bigint)) as usetime
-from dws_bobo_logs.dws_bobo_sdk_all
-where dt >= '20180113' and dt <= '20180120'
-and eventid = 'exit'
-group by dt,udid,parameters['new_device_tag']
-####
-select dt,pcid,parameters['exittype'] as exittype,count(1),count(distinct udid) as countudids
-from dws_bobo_logs.dws_bobo_sdk_all
-where dt >= '20180107' and dt  <= '20180120' and vname in ()
-and eventid = 'exit'
-group by dt,pcid,parameters['exittype']
+SELECT *
+FROM dws_bobo_logs.dws_bobo_sdk_all
+WHERE dt >= '20180107'
+    AND dt <= '20180107'
+    AND eventid = 'exit'
+LIMIT 10 ####
+SELECT dt,
+       PARAMETERS['exittype'] AS exittype,
+                 count(1),
+                 count(DISTINCT udid) AS countudids
+FROM dws_bobo_logs.dws_bobo_sdk_all
+WHERE dt >= '20180107'
+    AND dt <= '20180120'
+    AND eventid = 'exit'
+GROUP BY dt,
+         PARAMETERS['exittype'] ####
+SELECT dt,
+       udid,
+       PARAMETERS['new_device_tag'] AS usertype,
+                 sum(cast(coalesce(PARAMETERS['exittime'],'0')AS bigint)) AS usetime
+FROM dws_bobo_logs.dws_bobo_sdk_all
+WHERE dt >= '20180113'
+    AND dt <= '20180120'
+    AND eventid = 'exit'
+GROUP BY dt,
+         udid,
+         PARAMETERS['new_device_tag'] ####
+SELECT dt,
+       PARAMETERS['exittype'] AS exittype,
+                 vname,
+                 count(1),
+                 count(DISTINCT udid) AS countudids
+FROM dws_bobo_logs.dws_bobo_sdk_all
+WHERE dt >= '20180107'
+    AND dt <= '20180120'
+    AND vname IN ('1.9.0',
+                  '1.3.76',
+                  '1.3.78',
+                  '1.3.80')
+    AND eventid = 'exit'
+GROUP BY dt,
+         PARAMETERS['exittype'],vname
