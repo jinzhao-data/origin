@@ -1,0 +1,10 @@
+select dt,
+    parameters['channelid'] as channelId,
+    sum(case when parameters['is_rec_show']='Y' then 1 else 0 end) as showtimes
+from dws_bobo_logs.dws_bobo_sdk_all
+where format_datetime(from_unixtime(cast (parameters['createtime'] as bigint)),'yyyyMMdd') >='20171231'
+    and format_datetime(from_unixtime(cast (parameters['createtime'] as bigint)),'yyyyMMdd') <='20180106'
+    and dt='20180106'
+    and parameters['framer_owner_type'] is not null
+    and eventid='event_clientshow'
+group by dt,parameters['channelid']

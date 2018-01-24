@@ -35,3 +35,4 @@ left join
     dim_mp.dim_mp_rec_video t4
 on (cast(t3.videoid as bigint)=t4.video_id)
 order by 1,2,3,4,5;
+####zhushi

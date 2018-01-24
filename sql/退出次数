@@ -1,0 +1,24 @@
+select *
+from dws_bobo_logs.dws_bobo_sdk_all
+where dt >= '20180107' and dt  <= '20180107'
+    and eventid = 'exit' limit 10
+####
+select dt,parameters['exittype'] as exittype,count(1),count(distinct udid) as countudids
+from dws_bobo_logs.dws_bobo_sdk_all
+where dt >= '20180107' and dt  <= '20180120'
+and eventid = 'exit'
+group by dt,parameters['exittype']
+
+####
+select dt,udid,parameters['new_device_tag'] as usertype,
+sum(cast(coalesce(parameters['exittime'],'0')as bigint)) as usetime
+from dws_bobo_logs.dws_bobo_sdk_all
+where dt >= '20180113' and dt <= '20180120'
+and eventid = 'exit'
+group by dt,udid,parameters['new_device_tag']
+####
+select dt,pcid,parameters['exittype'] as exittype,count(1),count(distinct udid) as countudids
+from dws_bobo_logs.dws_bobo_sdk_all
+where dt >= '20180107' and dt  <= '20180120' and vname in ()
+and eventid = 'exit'
+group by dt,pcid,parameters['exittype']

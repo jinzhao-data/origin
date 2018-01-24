@@ -1,0 +1,55 @@
+select dt,
+    (case when (pcid like '%vivo%') then 'VIVO'
+         when (pcid like '%oppo%') then 'OPPO'
+         when (pcid like '%xiaomi%') then 'XIAOMI'
+         when (pcid like '%wifi%') then 'WIFI'
+         when (pcid like '%yyb%') then 'YYB'
+         when (pcid like '%toutiao%') then 'toutiao'
+         when (pcid like '%lb%') then 'lb'
+         else 'other' end) as pcid,
+    parameters['new_device_tag'] as usertype,
+    count(distinct case when eventid = 'app_start' then udid else '0' end) as pcid_vname_dau,
+    count(case when eventid = 'play' then 1 else null end) as vv,
+    sum(case when parameters['is_rec_show']='Y' then 1 else 0 end) as showtimes,
+    sum(case when parameters['is_rec_play']='Y' then 1 else 0 end ) as click,
+    sum(case when eventid='play' then cast(coalesce(parameters['playduration'],'0')as bigint) else 0 end) as vvtimes,
+    sum(case when eventid='play' then cast(coalesce(parameters['duration'],'0')as bigint) else 0 end) as alltimes
+from dws_bobo_logs.dws_bobo_sdk_all
+where  dt >= '20180105' and dt <= '20180106'
+    and eventid in ('event_clientshow','play')
+group by dt,(case when (pcid like '%vivo%') then 'VIVO'
+         when (pcid like '%oppo%') then 'OPPO'
+         when (pcid like '%xiaomi%') then 'XIAOMI'
+         when (pcid like '%wifi%') then 'WIFI'
+         when (pcid like '%yyb%') then 'YYB'
+         when (pcid like '%toutiao%') then 'toutiao'
+         when (pcid like '%lb%') then 'lb'
+         else 'other' end),
+     parameters['new_device_tag']
+
+####刷新数据
+select t1.dt,
+    t1.pcid,
+    (case when t2.udid is not null then 'new' else 'old' end) as usertype,
+    count(1) as refreshtimes,
+    count(distinct t1.udid) as refreshdau
+from
+(select dt,udid,
+    (case when (pcid like '%vivo%') then 'VIVO'
+         when (pcid like '%oppo%') then 'OPPO'
+         when (pcid like '%xiaomi%') then 'XIAOMI'
+         when (pcid like '%wifi%') then 'WIFI'
+         when (pcid like '%yyb%') then 'YYB'
+         when (pcid like '%toutiao%') then 'toutiao'
+         when (pcid like '%lb%') then 'lb'
+         else 'other' end) as pcid
+from dwd_logs.dwd_bobo_fast
+where  dt >= '20180101' and dt <= '20180109'
+    and eventid in ('refresh_auto','refresh_by_pull_down','refresh_by_home_top_tab','refresh_by_svideo_bottom_tab','refresh_by_home_bottom_tab',
+    'refresh_by_pull_up','refresh_by_last_tip')) t1
+left join
+(select distinct dt, udid
+    from dwd_logs.dwd_bobo_new_user
+    where dt >= '20180101' and dt <= '20180109' ) t2
+on t1.udid = t2.udid and t1.dt= t2.dt
+group by t1.dt,t1.pcid,(case when t2.udid is not null then 'new' else 'old' end)

@@ -1,0 +1,11 @@
+esult = urlopen(url)
+body = BeautifulSoup(result.read(), 'html5lib')
+good_result_div = body.find(class_='list-header').find('dd')
+second_result_div = body.find(class_='list-inner').find(class_='list')
+if good_result_div is not None:
+    good_result = good_result_div.get_text()
+    print(good_result.strip())
+
+if second_result_div is not None:
+    second_result = second_result_div.find('dl').find('dd').get_text()
+    print(second_result.strip())

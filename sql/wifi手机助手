@@ -1,4 +1,4 @@
-select dt,
+select dt,abid,
     count(case when eventid = 'toolbar_show' then 1 else null end) as toolbar_show_count,
     count(distinct case when eventid = 'toolbar_show' then udid else null end) as toolbar_show_uv,
     count(case when eventid = 'toolbar_close' then 1 else null end) as toolbar_close_count,
@@ -9,7 +9,7 @@ select dt,
     count(distinct case when eventid = 'toolbar_setting_click' and eventparams['isOpen'] = '0' then 1 else null end) as toolbar_close_uv_isopen
 from dwv_mp.dwv_mp_lite_sdk
 where dt >= '20180101' and dt <= '20180102'
-    and appname='波波视频' 
+    and appname='波波视频'
     and is_first_test=true
     and eventid in ('toolbar_show','toolbar_close','toolbar_setting_click')
     and abid in ('269-131','270-131','271-131','272-131')

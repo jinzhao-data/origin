@@ -22,3 +22,4 @@ from
      where dt>='20171219' and dt<= '20171228' group by dt,udid) t2
 on  t1.dt= t2.dt and t1.udid=t2.udid
 group by t1.dt
+order by t1.dt desc
