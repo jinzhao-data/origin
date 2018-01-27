@@ -6,11 +6,11 @@ WHERE dt >= '20180107'
 LIMIT 10 ####
 SELECT dt,
        PARAMETERS['exittype'] AS exittype,
-                 count(1),
+                 count(1) AS counttimes,
                  count(DISTINCT udid) AS countudids
 FROM dws_bobo_logs.dws_bobo_sdk_all
-WHERE dt >= '20180107'
-    AND dt <= '20180120'
+WHERE dt >= date_format(date_add('day',-8,CURRENT_DATE),'%Y%m%d')
+    AND dt <= date_format(date_add('day',-1,CURRENT_DATE),'%Y%m%d')
     AND eventid = 'exit'
 GROUP BY dt,
          PARAMETERS['exittype'] ####
