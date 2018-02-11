@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from PIL import ImageGrab
 import os
 from PIL import Image
@@ -18,7 +19,6 @@ def main():
     wd = urllib.request.quote(text)
     url = 'https://zhidao.baidu.com/search?ct=17&pn=0&tn=ikaslist&rn=10&fr=wwwt&word={}'.format(
         wd)
-    print(url)
     result = urlopen(url)
     body = BeautifulSoup(result.read(), 'html5lib')
     good_result_div = body.find(class_='list-header').find('dd')
