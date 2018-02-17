@@ -1,0 +1,48 @@
+SELECT t1.dt,
+       t1.pcid,t1.citytype,
+       count(DISTINCT t2.udid) AS NEXT,
+       count(DISTINCT t1.udid) AS FIRST
+FROM
+    (SELECT dt,
+            (case when (pcid like '%vivo%') then 'VIVO'
+         when (pcid like '%oppo%') then 'OPPO'
+         when (pcid like '%xiaomi%') then 'XIAOMI'
+         when (pcid like '%wifi%') then 'WIFI'
+         when (pcid like '%yyb%') then 'YYB'
+         when (pcid like '%toutiao%') then 'toutiao'
+         when (pcid like '%lb%') then 'lb'
+         when (pcid like '%tuia%') then 'tuia'
+         when (pcid like '%meizu%') then 'meizu'
+         when (pcid like '%huawei%') then 'huawei'
+         else 'other' end) AS pcid,(case when split(ip_info,'|')[5] in ('北京市','上海市','广州市','深圳市','成都市','杭州市','广汉市','德阳市','都江堰') then '北上广'
+         else 'other' end) as citytype,
+            udid
+     FROM dwd_logs.dwd_mpjs_log
+     WHERE dt in ('20180204', '20180116')
+         AND eventid ='app_start'
+     GROUP BY dt,(case when (pcid like '%vivo%') then 'VIVO'
+         when (pcid like '%oppo%') then 'OPPO'
+         when (pcid like '%xiaomi%') then 'XIAOMI'
+         when (pcid like '%wifi%') then 'WIFI'
+         when (pcid like '%yyb%') then 'YYB'
+         when (pcid like '%toutiao%') then 'toutiao'
+         when (pcid like '%lb%') then 'lb'
+         when (pcid like '%tuia%') then 'tuia'
+         when (pcid like '%meizu%') then 'meizu'
+         when (pcid like '%huawei%') then 'huawei'
+         else 'other' end),(case when split(ip_info,'|')[5] in ('北京市','上海市','广州市','深圳市','成都市','杭州市','广汉市','德阳市','都江堰') then '北上广'
+         else 'other' end),udid) t1
+JOIN
+(select dt,udid from dwd_logs.dwd_bobo_new_user where dt in ('20180204', '20180116')) t3
+on t1.dt =t3.dt and t1.udid = t3.udid
+LEFT JOIN
+    (SELECT date_format(date_add('day',-1,parse_datetime(dt,'yyyyMMdd')),'%Y%m%d') AS dt,
+            udid
+     FROM dws_bobo_logs.dws_bobo_sdk_all
+     WHERE dt in ('20180205','20180117')
+         AND eventid ='app_start'
+     GROUP BY dt,udid) t2 ON t1.dt = t2.dt
+AND t1.udid = t2.udid
+GROUP BY t1.dt,
+         t1.pcid,t1.citytype
+ORDER BY t1.dt DESC

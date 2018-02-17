@@ -1,0 +1,10 @@
+SELECT dt,
+       PARAMETERS['sdk_from'] AS sdk_from,
+                 count(DISTINCT udid) AS countudid
+FROM dws_bobo_logs.dws_bobo_sdk_all
+WHERE dt >= '20180107'
+    AND dt <= '20180108'
+    AND eventid = 'app_start'
+GROUP BY dt,
+         PARAMETERS['sdk_from']
+ORDER BY dt DESC

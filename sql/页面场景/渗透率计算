@@ -1,0 +1,42 @@
+####新用户
+SELECT count(udid)
+    (SELECT DISTINCT dt,
+                     udid
+     FROM dwd_logs.dwd_bobo_fast
+     WHERE dt = '20180120'
+         AND PARAMETERS['exittime'] <= '3'
+         AND eventid = 'exit') t1
+JOIN
+    (SELECT dt,
+            udid
+     FROM dwd dwd_bobo_new_user
+     WHERE dt = '20180120') t2 ON t1.udid = t2.udid
+
+###按版本拆分
+SELECT t1.dt,
+       t1.vname,
+       count(t1.udid) AS startudid,
+       count(t2.udid) AS playudid
+FROM
+    (SELECT DISTINCT dt,
+                     udid,
+                     vname
+     FROM dws_bobo_logs.dws_bobo_sdk_all
+     WHERE dt >= '20180101'
+         AND dt <= '20180114'
+         AND eventid = 'app_start'
+         AND PARAMETERS['new_device_tag'] = 'Y'
+         AND vname IN ('1.3.76',
+                       '1.3.68',
+                       '1.3.78')) t1
+LEFT JOIN
+    (SELECT DISTINCT dt,
+                     udid
+     FROM dws_bobo_logs.dws_bobo_sdk_all
+     WHERE dt >= '20180101'
+         AND dt <= '20180114'
+         AND eventid = 'play' ) t2 ON t1.udid = t2.udid
+AND t1.dt = t2.dt
+GROUP BY t1.dt,
+         t1.vname
+####按渠道拆分

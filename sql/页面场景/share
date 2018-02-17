@@ -1,0 +1,13 @@
+SELECT dt,
+       PARAMETERS['from'] AS share_success_way,
+                 count(1) AS times,
+                 count(DISTINCT udid) AS distinctudid
+FROM dws_bobo_logs.dwd_bobo_fast
+WHERE dt >= '20180120'
+    AND dt <= '20180203'
+    AND eventid = 'share_success_way'
+    AND PARAMETERS['from'] IN ('7',
+                               '8',
+                               '9')
+GROUP BY dt,
+         PARAMETERS['from']

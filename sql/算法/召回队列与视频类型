@@ -1,0 +1,43 @@
+select t3.dt,
+      t3.queue_name as "队列",
+       t3.tagname as "视频类型",
+       t3.showtimes as "曝光量",
+       t3.click as "点击量",
+       t3.vidcount as "点击视频个数",
+       t3.vv as "vv",
+       t3.vvtimes as "播放时长",
+       t3.alltimes as "视频时长"
+from
+(select t1.dt,
+  t1.queue_name,
+  t2.tagname,
+  count(distinct t1.videoid) as vidcount,
+  sum(case when t2.is_rec_show='Y' then 1 else 0 end) as showtimes,
+  sum(case when t2.is_rec_play='Y' then 1 else 0 end ) as click,
+  count(case when eventid='play' then 1 else null end)as vv,
+  sum(case when eventid='play' then cast(coalesce(t2.playDuration,'0')as bigint) else 0 end) as vvtimes,
+  sum(case when eventid='play' then cast(coalesce(t2.duration,'0')as bigint) else 0 end) as alltimes
+from
+(select dt,impressionid,videoid,queue_name,count(*)
+         from dwd_logs.dwd_mpjs_log_recommend_user_video
+         CROSS JOIN UNNEST(split(queue,' ')) AS t (queue_name)
+         where dt>='20171225' and dt <= '20171226' and queue_name in ('safe','pigsy','doc2vec','itemcf') and length(impressionid)>0 and length(videoid)>0 and length(trim(queue_name))>0
+         group by dt,impressionid,videoid,queue_name) t1
+join
+(select dt,
+  parameters['impressionid'] as impressionid,
+  parameters['vid']  as videoid,
+  parameters['tag_name'] as tagname,
+  eventid,
+  parameters['is_rec_show'] as is_rec_show,
+  parameters['is_rec_play'] as is_rec_play,
+  cast(parameters['playduration'] as varchar) as playDuration,
+  cast(parameters['duration'] as varchar) as duration
+ from dws_bobo_logs.dws_bobo_sdk_all
+ where dt>='20171225' and dt <= '20171226'
+  and length(parameters['impressionid'])>0
+  and length(parameters['vid'])>0
+  and (eventid ='play' or eventid='event_clientshow')
+  and (parameters['source']='1' or parameters['source']='4' or parameters['source']='21' or parameters['source']='22')) t2
+on (t1.impressionid=t2.impressionid and t1.videoid=t2.videoid and t1.dt = t2.dt)
+group by t1.dt,t1.queue_name,t2.tagname) t3

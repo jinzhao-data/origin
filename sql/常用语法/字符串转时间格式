@@ -1,0 +1,11 @@
+SELECT t3.udid,
+       count(t3.week) AS weekonlinetimes
+FROM
+    (SELECT DISTINCT udid,
+                     week(parse_datetime(dt,'yyyyMMdd')) AS week
+     FROM dwd_logs.dwd_bobo_fast
+     WHERE dt >= '20171113'
+         AND dt <='20171210'
+         AND eventid = 'app_start') t3
+GROUP BY t3.udid
+HAVING count(t3.week) =4 week(parse_datetime(dt,'yyyyMMdd')

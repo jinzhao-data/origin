@@ -1,0 +1,34 @@
+select t1.dt,(case when t2.udid is not null then 'xiaoshipin' else 'feixiaoshipin' end) as usertype,t1.new_old,
+    count(distinct t1.udid) as dau,
+    sum(t1.usetime) as allusetime,
+    sum(t1.playduration) as playtime,
+    count(t3.seconddt) as next_dt_dau
+from
+(select dt,udid,parameters['new_device_tag'] as new_old,sum(CASE
+                    WHEN eventid='exit' THEN cast(coalesce(PARAMETERS['exittime'],'0') AS bigint)/60000
+                    ELSE 0
+                END) as usetime,
+                sum(CASE
+                    WHEN eventid='play' THEN cast(coalesce(PARAMETERS['playduration'],'0')AS bigint)
+                    ELSE 0
+                END) as playduration
+from dws_bobo_logs.dws_bobo_sdk_all where dt >= '20180126' and dt <= '20180201' and eventid in ('exit','play')
+group by dt,udid,parameters['new_device_tag']
+having sum(CASE
+                    WHEN eventid='exit' THEN cast(coalesce(PARAMETERS['exittime'],'0') AS bigint)/60000
+                    ELSE 0
+                END) < 360) t1
+left join
+(SELECT distinct dt,udid
+FROM dwd_logs.dwd_bobo_fast
+WHERE dt >= '20180126' and dt <= '20180201'
+    and PARAMETERS['tab'] = '小视频'
+    AND eventid = 'main_tab_click') t2
+on t1.dt = t2.dt and t1.udid =t2.udid
+left join
+(SELECT distinct date_format(date_add('day',-1,parse_datetime(dt,'yyyyMMdd')),'%Y%m%d') as seconddt, udid
+     FROM dws_bobo_logs.dws_bobo_sdk_all
+     WHERE dt >= '20180126' and dt <= '20180201'
+         AND eventid = 'app_start') t3
+on t1.dt = t3.seconddt and t1.udid = t3.udid
+group by t1.dt,(case when t2.udid is not null then 'xiaoshipin' else 'feixiaoshipin' end),t1.new_old

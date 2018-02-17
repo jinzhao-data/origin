@@ -1,0 +1,21 @@
+SELECT dt,
+       count(1)
+FROM dwd_logs.dwd_bobo_fast
+WHERE dt > '20180120'
+    AND eventid = 'login_error'
+GROUP BY dt
+SELECT dt,
+       count(CASE
+                 WHEN eventid = 'login' THEN 1
+                 ELSE NULL
+             END) AS success,
+       count(CASE
+                 WHEN eventid = 'login_way' THEN 1
+                 ELSE NULL
+             END) AS times
+FROM dwd_logs.dwd_bobo_fast
+WHERE dt > '20180131'
+    AND eventid IN ('login',
+                    'login_way')
+GROUP BY dt
+ORDER BY dt

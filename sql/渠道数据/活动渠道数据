@@ -1,0 +1,32 @@
+SELECT dt,
+       count(DISTINCT CASE
+                          WHEN eventid = 'app_start' THEN udid
+                          ELSE NULL
+                      END) AS pcid_dau,
+       sum(CASE
+               WHEN eventid = 'exit' THEN cast(coalesce(PARAMETERS['exittime'],'0') AS bigint)
+               ELSE 0
+           END) AS usetime,
+       count(DISTINCT CASE
+                          WHEN eventid = 'exit' THEN udid
+                          ELSE NULL
+                      END) AS usetimes,
+       sum(CASE
+               WHEN eventid = 'play' THEN cast(coalesce(PARAMETERS['playduration'],'0') AS bigint)
+               ELSE 0
+           END) AS playtime,
+       count(DISTINCT CASE
+                          WHEN eventid = 'play' THEN udid
+                          ELSE NULL
+                      END) AS playtimes,
+       count(CASE
+                 WHEN eventid = 'play' THEN 1
+                 ELSE NULL
+             END) AS vv
+FROM dws_bobo_logs.dws_bobo_sdk_all
+WHERE pcid = 'bb_wx_single'
+    AND dt = '20180207'
+    AND eventid IN ('app_start',
+                    'play',
+                    'exit')
+GROUP BY dt

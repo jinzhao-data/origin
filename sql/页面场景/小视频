@@ -1,0 +1,11 @@
+SELECT dt,
+       count(1) AS clicktimes,
+       count(DISTINCT udid) AS tab_dau,
+       sum(CASE WHEN eventid = 'main_tab_changed' THEN cast(coalesce(PARAMETERS['playduration'],'0') AS bigint) end) AS usetime
+FROM dwd_logs.dwd_bobo_fast
+WHERE dt >= '20180124'
+    and PARAMETERS['tab'] = '小视频'
+    AND eventid IN ('main_tab_click',
+                    'main_tab_changed')
+GROUP BY dt
+ORDER BY dt

@@ -1,0 +1,9 @@
+select dt,eventid
+    count(1) as "刷新次数",
+    count(distinct udid) as "刷新人数"
+from dwd_logs.dwd_bobo_fast
+where dt >= date_format(date_add('day',-8,current_date),'%Y%m%d') and dt <= date_format(date_add('day',-1,current_date),'%Y%m%d')
+and eventid in ('refresh_auto','refresh_by_pull_down','refresh_by_home_top_tab',
+'refresh_by_svideo_bottom_tab','refresh_by_home_bottom_tab','refresh_by_pull_up','refresh_by_last_tip')
+group by dt,eventid
+order by dt DESC

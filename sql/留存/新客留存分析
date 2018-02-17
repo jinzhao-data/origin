@@ -1,0 +1,45 @@
+SELECT t1.*,
+       (CASE
+            WHEN t2.udid IS NOT NULL THEN 1
+            ELSE 0
+        END) AS win
+FROM
+    (SELECT udid,
+            count(CASE
+                      WHEN eventid = 'app_start' THEN 1
+                      ELSE NULL
+                  END) AS appstrart,
+            count(DISTINCT (CASE
+                                WHEN eventid = 'play' THEN PARAMETERS['vid']
+                                ELSE NULL
+                            END)) AS vidcount,
+            sum(CASE
+                    WHEN PARAMETERS['is_rec_show']='Y' THEN 1
+                    ELSE 0
+                END) AS showtimes,
+            sum(CASE
+                    WHEN PARAMETERS['is_rec_play']='Y' THEN 1
+                    ELSE 0
+                END) AS click,
+            count(CASE
+                      WHEN eventid='play' THEN 1
+                      ELSE NULL
+                  END) AS vv,
+            sum(CASE
+                    WHEN eventid='play' THEN cast(coalesce(PARAMETERS['playduration'],'0')AS bigint)
+                    ELSE 0
+                END) AS vvtimes,
+            sum(CASE
+                    WHEN eventid='play' THEN cast(coalesce(PARAMETERS['duration'],'0')AS bigint)
+                    ELSE 0
+                END) AS alltimes
+     FROM dws_bobo_logs.dws_bobo_sdk_all
+     WHERE dt = '20171230'
+         AND PARAMETERS['new_device_tag'] = 'Y'
+     GROUP BY udid) t1
+LEFT JOIN
+    (SELECT DISTINCT udid
+     FROM dws_bobo_logs.dws_bobo_sdk_all
+     WHERE dt = '20171231'
+         AND eventid = 'app_start'
+     GROUP BY udid) t2 ON t1.udid = t2.udid
