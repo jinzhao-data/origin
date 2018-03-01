@@ -23,7 +23,7 @@ FROM
             eventid,
             count(1) AS refreshtime
      FROM dwd_logs.dwd_bobo_fast
-     WHERE dt >= date_format(date_add('day',-4,CURRENT_DATE),'%Y%m%d')
+     WHERE dt >= date_format(date_add('day',-8,CURRENT_DATE),'%Y%m%d')
          AND dt <= date_format(date_add('day',-1,CURRENT_DATE),'%Y%m%d')
          AND eventid IN ('refresh_auto',
                          'refresh_by_pull_down',
@@ -39,7 +39,7 @@ LEFT JOIN
     (SELECT dt,
             udid
      FROM dwd_logs.dwd_bobo_new_user
-     WHERE dt >= date_format(date_add('day',-4,CURRENT_DATE),'%Y%m%d')
+     WHERE dt >= date_format(date_add('day',-8,CURRENT_DATE),'%Y%m%d')
          AND dt <= date_format(date_add('day',-1,CURRENT_DATE),'%Y%m%d')) t2 ON t1.udid = t2.udid
 AND t1.dt =t2.dt
 GROUP BY t1.dt,(CASE
