@@ -1,0 +1,35 @@
+
+select (case when dt >= '20180228' and dt <= '20180302' then '3th'
+            when dt >= '20180225' and dt <= '20180227' then '6th'
+            when dt >= '20180222' and dt <= '20180224' then '9th'
+            when dt >= '20180219' and dt <= '20180221' then '12th'
+            when dt >= '20180216' and dt <= '20180218' then '15th'
+            when dt >= '20180213' and dt <= '20180215' then '18th'
+            when dt >= '20180210' and dt <= '20180212' then '21th'
+            else 'other' end) as comefromday,count(t305.udid)
+from
+(select t1.udid
+from
+(select distinct udid from dws_bobo_logs.dws_bobo_sdk_all where dt = '20180305' and eventid = 'app_start') t1
+left join
+((select t2.udid
+from
+(select distinct udid from dws_bobo_logs.dws_bobo_sdk_all where dt = '20180305' and eventid = 'app_start') t2
+join
+(select distinct udid from dws_bobo_logs.dws_bobo_sdk_all where dt = '20180304' and eventid = 'app_start') t3
+on t2.udid = t3.udid)
+union
+select distinct udid from dws_bobo_logs.dws_bobo_sdk_all where dt = '20180305' and eventid = 'app_start' and parameters['new_device_tag'] = 'Y') t4
+on t1.udid = t4.udid
+where t4.udid is null) t305
+left join
+(select dt,udid from dwd_logs.dwd_bobo_new_user) tnew
+on t305.udid = tnew.udid
+group by (case when dt >= '20180228' and dt <= '20180302' then '3th'
+            when dt >= '20180225' and dt <= '20180227' then '6th'
+            when dt >= '20180222' and dt <= '20180224' then '9th'
+            when dt >= '20180219' and dt <= '20180221' then '12th'
+            when dt >= '20180216' and dt <= '20180218' then '15th'
+            when dt >= '20180213' and dt <= '20180215' then '18th'
+            when dt >= '20180210' and dt <= '20180212' then '21th'
+            else 'other' end)

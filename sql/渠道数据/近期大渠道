@@ -7,15 +7,3 @@ where dt <= date_format(date_add('day',-1,CURRENT_DATE),'%Y%m%d')
     and eventid = 'app_start' and PARAMETERS['new_device_tag'] = 'Y'
 group by dt,pcid
 order by pcid_dau desc
-
-
-
-####近6天渠道流量
-SELECT pcid,
-    count(DISTINCT udid) as pcid_dau
-FROM dws_bobo_logs.dws_bobo_sdk_all
-where dt <= date_format(date_add('day',-1,CURRENT_DATE),'%Y%m%d')
-    and dt >= date_format(date_add('day',-5,CURRENT_DATE),'%Y%m%d')
-    and eventid = 'app_start' and PARAMETERS['new_device_tag'] = 'Y'
-group by pcid
-order by pcid_dau desc
