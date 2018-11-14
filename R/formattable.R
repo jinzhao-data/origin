@@ -1,3 +1,4 @@
+library(formattable)
 formattable(df, list(age = color_tile("white", "orange"), grade = formatter("span", 
     style = x ~ ifelse(x == "A", style(color = "green", font.weight = "bold"), NA)), 
     area(col = c(test1_score, test2_score)) ~ normalize_bar("pink", 0.2), final_score = formatter("span", 

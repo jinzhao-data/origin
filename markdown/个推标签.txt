@@ -1,0 +1,150 @@
+Occupation status and category	3	职业状态和类别
+Looking for a working population	3	找工作人群
+Industry engaged	3	所从事行业
+hometown	3	家乡
+live or travel from abroad	3	从国外来中国居住或者旅游的人
+residence	3	居住地
+Living City	3	居住城市
+Living City Level	3	居住城市级别
+moved in the last month	3	最近一个月搬家的人
+Domestic tourists	3	国内游游客
+Outbound tourists	3	出境游游客
+Graduates	3	应届毕业生
+going married or just married	3	将要结婚或者刚举办过婚礼的人
+about to have children or just 	3	即将生小孩或者刚生小孩的人
+looking for a job	3	正在找工作的人
+About to change jobs or just 	3	准备跳槽或者刚跳槽的人
+Stockholders	3	炒股的人
+Investors	3	投资理财的人
+bookkeeping	3	有记账习惯的人群
+Bank customers	3	银行客户
+Credit card customers	3	信用卡客户
+Lottery ticket	3	买彩票的人
+p2p lenders	3	在线p2p借贷的人
+Online shopping	3	网购的人
+Haitao	3	海淘族
+Often send courier	3	经常寄快递的人
+Like to buy wine	3	喜欢买酒的人
+Group buying	3	团购人群
+preschool education needs	3	有学前教育需求的父母
+Primary and middle school education target 	3	中小学教育目标人群
+Adults with learning needs	3	有继续学习需求的成年人
+Learn English	3	学习英语的人群
+Prepare  study abroad	3	准备出国留学的人
+Certificate of the crowd	3	考证书的人群
+Language learners	3	语言学习者
+attending online courses	3	参加在线课程的人
+Business travel	3	商务出行的人群
+Travel enthusiasts	3	旅行爱好者
+Frequently booked hotels online	3	经常网上订酒店的人
+Outdoor activity 	3	户外活动参与者
+Often travel around 	3	经常周边游人群
+Car rental	3	租车的用户
+about to buy a car	3	即将买车的人
+Driving test 	3	驾考人群
+interested in cars	3	对车有兴趣的人
+looking for a driver	3	找代驾的人
+Investigating illegal 	3	查违章的车主
+car care and maintenance	3	有汽车维修保养洗车等需求的车主
+interested in buying and selling used cars	3	对二手车买卖感兴趣的人
+care about news	3	关注新闻的人
+Magazine readers	3	杂志读者
+read novels	3	爱看小说的人
+bookListeners	3	听书的人
+Comic person	3	看漫画的人
+humorous paragraph	3	看幽默段子的人
+Pictorial enthusiast	3	画报爱好者
+Sports fans, most football fans	3	体育迷，大部分足球球迷
+Online karaoke	3	在线K歌的人
+installing music player	3	安装音乐播放器的人
+Radio listener	3	电台收听者
+Like to  ringtones	3	喜欢换手机铃声的人
+installed the video player	3	安装视频播放器的人
+watching online live	3	在线看直播的人
+Online video audience	3	在线视频观众
+music enthusiast	3	音乐爱好者
+Chat software	3	聊天软件使用者
+Online Dating 	3	在线交友约会人群
+Courtship	3	找对象的人
+Weibo users	3	微博用户
+online communities	3	逛在线社区的人
+Restaurant recommended people	3	餐厅推荐的人
+Orderer
+online	3	叫外卖的人
+Fresh delivery user	3	生鲜配送服务用户
+domestic services user	3	找家政服务的人
+Laundry customers	3	洗衣店顾客
+People looking for food	3	找人做饭的人
+need massage services	3	需要按摩服务的人
+Movie lovers	3	电影爱好者
+Pet lovers	3	宠物爱好者
+Tenant	3	租客
+move	3	将要搬家的人
+about  to buy a house	3	将买房的人
+decorating or interested in home	3	正在装修的人或者对家居感兴趣的人
+preparing for the wedding	3	筹备婚礼的人
+Fitness	3	健身的人
+Weight loss	3	减肥族
+Health-conscious	3	关注健康的人
+Chronic patients	3	慢性病患者
+use beauty camera	3	使用美颜类相机的人群
+po maps online	3	喜欢在网上po图的人
+Camera software users	3	摄像软件使用者
+Cosmetic users	3	化妆品用户
+parenting communities	3	在育儿社区内交流的父母
+management software user	3	使用经期管理软件的人
+Traveller	3	出行打车的人
+Cooking lovers	3	烹饪爱好者
+navigation software user	3	使用导航软件的人
+care about the weather	3	关注天气的人
+using cloud disk user	3	使用云盘的人
+Office software users	3	办公软件使用者
+Note-taking person	3	记笔记的人
+Mailbox user	3	邮箱用户
+The corresponding type of game player	3	相应类型游戏玩家
+Corresponding mobile brand users	3	相应手机品牌用户
+Corresponding phone system language	3	相应手机系统语言
+Mobile users	3	移动用户
+Unicom users	3	联通用户
+Telecommunications users	3	电信用户
+Other operator users	3	其他运营商用户
+low	4	低
+Mid	4	中
+high	4	高
+unmarried	4	未婚
+Courtship	4	求偶
+married	4	已婚
+Older unmarried	4	大龄未婚
+Gay	4	男同
+Lesbian	4	女同
+heterosexuality	4	异性恋
+Schoolchildren	4	中小学生
+College Students	4	大学生
+white collar	4	白领
+teacher	4	教师
+programmer	4	程序员
+Doctors	4	医生
+truck driver	4	货车司机
+Net about car driver	4	网约车司机
+IT	4	IT
+financial	4	金融
+advertising	4	广告
+mainland	4	大陆
+Hong Kong, Macao and Taiwan	4	港澳台
+foreign	4	国外
+First-tier cities	4	一线城市
+Second-tier cities	4	二线城市
+third-tier city	4	三线城市
+Four-tier cities and below	4	四线及以下城市
+Hong Kong, Macao and Taiwan	4	港澳台
+Southeast Asia	4	东南亚
+Japan and South Korea	4	日韩
+Europe	4	欧洲
+Other regions of the Americas	4	美洲其他地区
+Middle East Africa	4	中东非洲
+ANZ Nantai	4	澳新南太
+Other regions in Asia	4	亚洲其他地区
+Antarctica	4	南极洲
+America / Canada	4	美国加拿大
+High school graduation	4	中学毕业
+High school graduation	4	高等教育结业
